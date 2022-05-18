@@ -24,7 +24,7 @@ class CreateTasksTable extends Migration
             $table->foreignId('executor_id')->constrained('users');
 
             $table->foreignId(\App\Models\Organisation::class)->constrained('organisations');
-            $table->foreignIdFor(\App\Models\TaskStatuses::class)->constrained('task_statuses');
+            $table->foreignIdFor(\App\Models\TaskStatus::class)->constrained('task_statuses');
 
             $table->timestamps();
         });

@@ -15,11 +15,8 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    protected AuthService $authService;
-
-    public function __construct(AuthService $authService)
+    public function __construct(protected AuthService $authService)
     {
-        $this->authService = $authService;
     }
 
     public function register(Request $request): JsonResponse
@@ -33,16 +30,16 @@ class RegisterController extends Controller
             'age' => ['sometimes', 'int'],
             'password' => ['required', 'min:4'],
             'password_confirm' => ['required', 'same:password'],
-            'new_organisation' => ['boolean']
+            'organisation_id' => ['sometimes', 'int', 'exists:organisations,id']
         ]);
 
         if ($validator->fails()) {
-            return $this->errorResponse([], $validator->errors()->getMessages(), 400);
+            return $this->errorResponse($validator->errors()->getMessages(), $validator->getMessageBag()->all(), 400);
         }
 
         DB::beginTransaction();
         try {
-            $user = $this->authService->register($validator->validated());
+            $this->authService->register($validator->validated());
 
             DB::commit();
         } catch (\Exception $exception) {
@@ -51,7 +48,7 @@ class RegisterController extends Controller
             return $this->errorResponse([], $exception->getMessage(), 400);
         }
 
-        return $this->successResponse(new UserResource($user), 'user created', 401);
+        return $this->successResponse([], 'User created', 201);
     }
 
     public function approveEmail(Request $request)

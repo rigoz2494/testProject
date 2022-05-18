@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\TaskStatuses;
+use App\Models\TaskStatus;
 use Illuminate\Database\Seeder;
 
 class TaskStatusesSeeder extends Seeder
@@ -19,7 +19,7 @@ class TaskStatusesSeeder extends Seeder
         ];
 
         foreach ($statuses as $status) {
-            TaskStatuses::query()->updateOrCreate(['name' => $status]);
+            TaskStatus::query()->updateOrCreate(['name' => $status]);
         }
     }
 }

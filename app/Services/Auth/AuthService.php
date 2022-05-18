@@ -30,17 +30,18 @@ class AuthService
             'password' => Hash::make($data['password'])
         ]);
 
-        if (Arr::has($data, 'organisation')) {
-            $user->organisations()->attach(Arr::get($data, 'organisation'));
+        if (Arr::has($data, 'organisation_id')) {
+            $user->organisations()->attach(Arr::get($data, 'organisation_id'));
         }
 
         $user->contact()->create(
             Arr::only($data, $this->contact->getFillable())
         );
+        $user->load('contact');
 
-        if (Arr::has($data, 'new_organisation')) {
-            $user->createdOrganisation()->create([
-                'name' => $user->contact->fullName
+        if (!Arr::has($data, 'organisation_id')) {
+            $user->company()->create([
+                'name' => $user->username
             ]);
         }
 
@@ -51,10 +52,8 @@ class AuthService
 
     public function attempt(array $data): bool
     {
-        $isEmail = filter_var($data['login'], FILTER_VALIDATE_EMAIL);
+        $key = Arr::first(array_keys($data));
 
-        $loginField = $isEmail ? 'email' : 'username';
-
-        return Auth::attempt([$loginField => $data['login'], 'password' => $data['password']]);
+        return Auth::attempt([$key => $data[$key], 'password' => $data['password']]);
     }
 }

@@ -41,7 +41,7 @@ class User extends Authenticatable
         return $this->hasOne(Contact::class);
     }
 
-    public function createdOrganisation(): HasOne
+    public function company(): HasOne
     {
         return $this->hasOne(Organisation::class);
     }

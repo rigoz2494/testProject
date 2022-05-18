@@ -3,15 +3,15 @@
 namespace App\Services;
 
 use App\Models\Task;
-use App\Models\TaskStatuses;
+use App\Models\TaskStatus;
 
 class TaskService
 {
     protected Task $task;
 
-    protected TaskStatuses $taskStatuses;
+    protected TaskStatus $taskStatuses;
 
-    public function __construct(Task $task, TaskStatuses $taskStatuses)
+    public function __construct(Task $task, TaskStatus $taskStatuses)
     {
         $this->task = $task;
         $this->taskStatuses = $taskStatuses;

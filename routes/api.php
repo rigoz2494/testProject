@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,11 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register', [RegisterController::class, 'register'])->name('register');
+Route::post('registration', [RegisterController::class, 'register'])->name('register');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('user', fn(Request $request) => $request->user());
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::get('user', [UserController::class, 'getUser']);
 
 //    Route::apiResource('organisations', )
 });
